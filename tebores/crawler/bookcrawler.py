@@ -42,8 +42,9 @@ class FreeCBCrawler(BookCrawler):
 		book_dict =  {}
 		for li in soup.find(id='newBooksG').find_all('li'):
 			for link in li.find_all('a'):
-				print link.text, link.get('href')
-				book_dict[link.get('href')] = link.text
+				if re.match('/.*', link.get('href')):
+					#print link.text, link.get('href')
+					book_dict[link.get('href')] = link.text
 
 		return book_dict
 

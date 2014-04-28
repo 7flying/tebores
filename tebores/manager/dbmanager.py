@@ -41,8 +41,8 @@ class DBManager(object):
 				url TEXT NOT NULL UNIQUE);"""
 			)
 
-			#cursor.execute("INSERT INTO Webs (name, url) VALUES ('it-ebooks', 'http://it-ebooks.info/')")
-			#cursor.execute("INSERT INTO Webs (name, url) VALUES ('freecomputerbooks', 'http://freecomputerbooks.com/')")
+			cursor.execute("INSERT INTO Webs (name, url) VALUES ('it-ebooks', 'http://it-ebooks.info/')")
+			cursor.execute("INSERT INTO Webs (name, url) VALUES ('freecomputerbooks', 'http://freecomputerbooks.com/')")
 
 			DBManager.conn.commit()
 			self.disconnect()
@@ -64,10 +64,11 @@ class DBManager(object):
 	def insert_book(self, book_web_url, book_name, book_url):
 		cursor = DBManager.conn.cursor()
 		# Get book_web_url id
-		cursor.execute("SELECT id FROM Webs WHERE url = ?;", (book_web_url,))
+		cursor.execute("SELECT id FROM Webs WHERE url = ?", (book_web_url,))
 		result = cursor.fetchone()
+		print result
 		if result:
-			cursor.execute("INSERT INTO Books (idWeb, name, url) VALUES (?, ?, ?);", (result, book_name, book_url))
+			cursor.execute("INSERT INTO Books (idWeb, name, url) VALUES (?, ?, ?);", (result[0], book_name, book_url))
 			DBManager.conn.commit()
 			print "book inserted"
 		else:
