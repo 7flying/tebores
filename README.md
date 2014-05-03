@@ -1,4 +1,4 @@
 tebores
 =======
 
-Tebores is a Tech Book Recomendation System
+Tebores is a Tech Book Recommendation System
