@@ -74,9 +74,19 @@ class DBManager(object):
 		else:
 			print "not fetched"
 
+	def is_new_book(self, book_url):
+		cursor = DBManager.conn.cursor()
+		cursor.execute("SELECT * FROM Books WHERE url = ?", (book_url,))
+		result = cursor.fetchone()
+		return False if result else True
+
 
 if __name__ == '__main__':
 	manager = DBManager()
 	manager.connect()
-	manager.insert_book("http://it-ebooks.info/", "some book name", "some book url")
+	if(manager.is_new_book("some book url")):
+		manager.insert_book("http://it-ebooks.info/", "some book name", "some book url")
+	else:
+		print "book already inserted"
+
 	manager.disconnect()
