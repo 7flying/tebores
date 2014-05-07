@@ -9,9 +9,9 @@ from files import auth
 from crawler import bookcrawler
 from manager import dbmanager
 
-new_books = Queue.Queue()
+new_books = Queue.Queue() # Holds a tuple of (BookName-url)
 manager = dbmanager.DBManager()
-ttl = 0
+ttl = 0 # TODO
 
 def producer_():
 	crawlers = []
@@ -24,7 +24,7 @@ def producer_():
 				if is_new_book(book):
 					# url of web page, book name, book url
 					manager.insert_book(crawler.get_url(), books[book], book)
-					new_books.put(books[book])
+					new_books.put( (books[book], crawler.get_url() + book))
 			sleep(60)
 
 
@@ -33,7 +33,7 @@ def consumer_():
 	bot.sign_in(auth.user, auth.password)
 	while True:
 		book = new_books.get()
-		bot.tweet("New book: " + book)
+		bot.tweet(book[0] + " " + book[1])
 		sleep(5)
 
 def is_new_book(book_url):
@@ -43,7 +43,7 @@ def main():
 	typo = True
 	while  typo:
 		try:
-			ttl = int(raw_input('Time to live > '))
+			ttl = int(raw_input('Time to live > ')) #TODO
 			typo = False
 		except ValueError:
 			typo = True

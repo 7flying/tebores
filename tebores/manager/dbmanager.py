@@ -6,7 +6,7 @@ import sys
 class DBManager(object):
 	
 	conn = None
-	dbname = 'tebores_test.db'
+	dbname = 'tebores_test2.db'
 	
 	def __init__(self):
 		if not isfile(DBManager.dbname):
