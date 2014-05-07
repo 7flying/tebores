@@ -1,3 +1,4 @@
 TODO.md
 auth.py
 *.pyc
+*.db

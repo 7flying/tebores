@@ -29,7 +29,7 @@ def producer_():
 
 
 def consumer_():
-	bot = bots.DesktopBot()
+	bot = desktopbot.DesktopBot()
 	bot.sign_in(auth.user, auth.password)
 	while True:
 		book = new_books.get()
@@ -52,9 +52,7 @@ def main():
 	consumer = threading.Thread(target=consumer_)
 	consumer.setDaemon(True)
 	consumer.start()
-	producer = threading.Thread(target=producer_)
-	producer.setDaemon(True)
-	producer.start()
+	producer_()
 
 
 if __name__ == '__main__':
