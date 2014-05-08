@@ -3,8 +3,8 @@ import re
 from bs4 import BeautifulSoup
 from requests import get
 
-url_itebooks = 'http://it-ebooks.info/'
-url_freecomputerbooks = 'http://freecomputerbooks.com/'
+url_itebooks = 'http://it-ebooks.info'
+url_freecomputerbooks = 'http://freecomputerbooks.com'
 
 
 class BookCrawler(object):
@@ -50,19 +50,3 @@ class FreeCBCrawler(BookCrawler):
 					book_dict[link.get('href')] = link.text
 
 		return book_dict
-
-def main():
-	
-	cb = FreeCBCrawler()
-	print cb.get_books()
-	print "-" * 10
-	itb = ITebooksCrawler()
-	print itb.get_books()
-	
-	
-	
-	
-
-
-if __name__ == '__main__':
-	main()

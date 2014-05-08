@@ -24,6 +24,7 @@ def producer_():
 				if is_new_book(book):
 					# url of web page, book name, book url
 					manager.insert_book(crawler.get_url(), books[book], book)
+					print "New book: %s\n" % (books[book] + " - " + crawler.get_url() + book)
 					new_books.put( (books[book], crawler.get_url() + book))
 			sleep(60)
 
@@ -33,7 +34,9 @@ def consumer_():
 	bot.sign_in(auth.user, auth.password)
 	while True:
 		book = new_books.get()
-		bot.tweet(book[0] + " " + book[1])
+		print "Tweet: %s" % (book[0] + " " + book[1])
+		manager.mark_tweeted(book[1])
+		#bot.tweet(book[0] + " " + book[1])
 		sleep(5)
 
 def is_new_book(book_url):

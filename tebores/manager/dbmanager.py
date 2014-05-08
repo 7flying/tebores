@@ -6,7 +6,7 @@ import sys
 class DBManager(object):
 	
 	conn = None
-	dbname = 'tebores_test2.db'
+	dbname = 'tebores_test3.db'
 	
 	def __init__(self):
 		if not isfile(DBManager.dbname):
@@ -21,11 +21,12 @@ class DBManager(object):
 				"""CREATE TABLE Books (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 				idWeb INTEGER NOT NULL REFERENCES Webs (id) ON DELETE CASCADE,
 				name TEXT NOT NULL,
-				url TEXT NOT NULL UNIQUE);"""
+				url TEXT NOT NULL UNIQUE,
+				tweeted INTEGER NOT NULL DEFAULT 0);"""
 			)
 
-			cursor.execute("INSERT INTO Webs (name, url) VALUES ('it-ebooks', 'http://it-ebooks.info/')")
-			cursor.execute("INSERT INTO Webs (name, url) VALUES ('freecomputerbooks', 'http://freecomputerbooks.com/')")
+			cursor.execute("INSERT INTO Webs (name, url) VALUES ('it-ebooks', 'http://it-ebooks.info')")
+			cursor.execute("INSERT INTO Webs (name, url) VALUES ('freecomputerbooks', 'http://freecomputerbooks.com')")
 
 			DBManager.conn.commit()
 			self.disconnect()
@@ -43,19 +44,17 @@ class DBManager(object):
 	def disconnect(self):
 		if DBManager.conn:
 			DBManager.conn.close()
+			DBManager.conn = None
 
 	def insert_book(self, book_web_url, book_name, book_url):
 		cursor = DBManager.conn.cursor()
 		# Get book_web_url id
 		cursor.execute("SELECT id FROM Webs WHERE url = ?", (book_web_url,))
 		result = cursor.fetchone()
-		print result
 		if result:
 			cursor.execute("INSERT INTO Books (idWeb, name, url) VALUES (?, ?, ?);", (result[0], book_name, book_url))
 			DBManager.conn.commit()
-			print "book inserted"
-		else:
-			print "not fetched"
+		
 
 	def is_new_book(self, book_url):
 		cursor = DBManager.conn.cursor()
@@ -63,13 +62,20 @@ class DBManager(object):
 		result = cursor.fetchone()
 		return False if result else True
 
+	def is_tweeted(self, book_url):
+		cursor = DBManager.conn.cursor()
+		cursor.execute("SELECT tweeted FROM Books WHERE url = ?", (book_url,))
+		result = cursor.fetchone()
+		return False if result == 0 else True
+
+	def mark_tweeted(self, book_url):
+		cursor = DBManager.conn.cursor()
+		cursor.execute("UPDATE Books SET tweeted = 1 WHERE url = ?", (book_url,))
+		DBManager.conn.commit()
+
 
 if __name__ == '__main__':
 	manager = DBManager()
 	manager.connect()
-	if(manager.is_new_book("some book url")):
-		manager.insert_book("http://it-ebooks.info/", "some book name", "some book url")
-	else:
-		print "book already inserted"
-
+	manager.insert_book("http://it-ebooks.info", "name", "book__url")
 	manager.disconnect()
