@@ -72,6 +72,10 @@ class DBManager(object):
 		cursor = DBManager.conn.cursor()
 		cursor.execute("UPDATE Books SET tweeted = 1 WHERE url = ?", (book_url,))
 		DBManager.conn.commit()
+		if self.is_tweeted(book_url):
+			print "UPDATE OK"
+		else:
+			print "UPDATE FAIL"
 
 
 if __name__ == '__main__':

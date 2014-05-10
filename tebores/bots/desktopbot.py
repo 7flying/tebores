@@ -24,7 +24,7 @@ class DesktopBot(object):
 	def __init__(self):
 		self.firefox = webdriver.Firefox()
 		self.firefox.get(DesktopBot.login_url)
-
+		
 	def sign_in(self, username, password):
 		try:
 			self.firefox.find_element_by_id(DesktopBot.login_input_username).send_keys(username)
