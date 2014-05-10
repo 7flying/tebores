@@ -6,10 +6,10 @@ import sys
 class DBManager(object):
 	
 	conn = None
-	dbname = 'tebores_test3.db'
 	
-	def __init__(self):
-		if not isfile(DBManager.dbname):
+	def __init__(self, name):
+		self.name = name
+		if not isfile(self.name):
 			self.connect()
 			cursor = DBManager.conn.cursor()
 			cursor.execute(
@@ -37,7 +37,7 @@ class DBManager(object):
 	def connect(self):
 		if DBManager.conn == None:
 			try:
-				DBManager.conn = lite.connect(DBManager.dbname)
+				DBManager.conn = lite.connect(self.name)
 			except lite.Error, e:
 				print "Exception %s" % e.args[0]
 
@@ -73,13 +73,7 @@ class DBManager(object):
 		cursor.execute("UPDATE Books SET tweeted = 1 WHERE url = ?", (book_url,))
 		DBManager.conn.commit()
 		if self.is_tweeted(book_url):
-			print "UPDATE OK"
+			print "UPDATE OK\n"
 		else:
-			print "UPDATE FAIL"
+			print "UPDATE FAIL\n"
 
-
-if __name__ == '__main__':
-	manager = DBManager()
-	manager.connect()
-	manager.insert_book("http://it-ebooks.info", "name", "book__url")
-	manager.disconnect()

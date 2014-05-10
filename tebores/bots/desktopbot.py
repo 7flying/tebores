@@ -46,4 +46,4 @@ class DesktopBot(object):
 		self.firefox.find_element_by_id(DesktopBot.new_tweet_button).click()
 		self.firefox.find_element_by_id(DesktopBot.new_tweet_text_box).send_keys(text)
 		self.firefox.find_element_by_id(DesktopBot.new_tweet_text_box).send_keys(Keys.CONTROL, Keys.RETURN)
-		
+		sleep(1)

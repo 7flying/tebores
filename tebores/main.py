@@ -10,11 +10,10 @@ from crawler import bookcrawler
 from manager import dbmanager
 
 new_books = Queue.Queue() # Holds a tuple of (BookName-url)
-manager = dbmanager.DBManager()
-ttl = 0 # TODO
+manager = dbmanager.DBManager("tebores_db.sqlite")
 
-to_mark = []
-to_mark_lock = threading.Condition()
+to_mark = [] # Books to mark as tweeted
+to_mark_lock = threading.Condition() 
 
 def producer_():
 	crawlers = []
@@ -24,6 +23,7 @@ def producer_():
 		for crawler in crawlers:
 			books = crawler.get_books()
 			for book in books.keys():
+				sleep(60)
 				if is_new_book(book):
 					# url of web page, book name, book url
 					insert_book(crawler.get_url(), books[book], book)
@@ -39,16 +39,16 @@ def producer_():
 
 
 def consumer_():
-	#bot = desktopbot.DesktopBot()
-	#bot.sign_in(auth.user, auth.password)
+	bot = desktopbot.DesktopBot()
+	bot.sign_in(auth.user, auth.password)
 	while True:
 		book = new_books.get()
-		print "Tweet: %s\n" % (book[0] + " " + book[1])
+		bot.tweet(book[0] + " " + book[1])
+		print "Tweet: %s" % (book[0] + " " + book[1])
 		with to_mark_lock:
 			to_mark.append(book[1])
 			to_mark_lock.notify()
-		#mark_tweeted(book[1])
-		#bot.tweet(book[0] + " " + book[1])
+	
 		sleep(1)
 
 
@@ -63,14 +63,6 @@ def mark_tweeted(book_url):
 
 
 def main():
-	typo = True
-	while  typo:
-		try:
-			ttl = int(raw_input('Time to live > ')) #TODO
-			typo = False
-		except ValueError:
-			typo = True
-
 	manager.connect()
 	consumer = threading.Thread(target=consumer_)
 	consumer.setDaemon(True)
