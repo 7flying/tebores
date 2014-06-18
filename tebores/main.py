@@ -3,6 +3,8 @@
 import threading
 import Queue
 from time import sleep
+from datetime import datetime
+from sys import argv
 
 from bots import desktopbot
 from files import auth
@@ -15,7 +17,7 @@ manager = dbmanager.DBManager("tebores_db.sqlite")
 to_mark = [] # Books to mark as tweeted
 to_mark_lock = threading.Condition() 
 
-def producer_():
+def producer_(time_to_wait):
 	crawlers = []
 	crawlers.append(bookcrawler.ITebooksCrawler())
 	crawlers.append(bookcrawler.FreeCBCrawler())
@@ -23,7 +25,6 @@ def producer_():
 		for crawler in crawlers:
 			books = crawler.get_books()
 			for book in books.keys():
-				sleep(60)
 				if is_new_book(book):
 					# url of web page, book name, book url
 					insert_book(crawler.get_url(), books[book], book)
@@ -34,7 +35,8 @@ def producer_():
 							to_mark_lock.wait()
 						mark = to_mark.pop(0)
 						mark_tweeted(mark)
-
+					# Wait the required time before cheking the next book
+					sleep(time_to_wait)
 			sleep(1)
 
 
@@ -44,7 +46,7 @@ def consumer_():
 	while True:
 		book = new_books.get()
 		bot.tweet(book[0] + " " + book[1])
-		print "Tweet: %s" % (book[0] + " " + book[1])
+		print "Tweet: %s \n\t@%s" % ((book[0] + " " + book[1]), datetime.now().time())
 		with to_mark_lock:
 			to_mark.append(book[1])
 			to_mark_lock.notify()
@@ -62,13 +64,16 @@ def mark_tweeted(book_url):
 	manager.mark_tweeted(book_url)
 
 
-def main():
+def main(time_to_wait=60):
 	manager.connect()
 	consumer = threading.Thread(target=consumer_)
 	consumer.setDaemon(True)
 	consumer.start()
-	producer_()
+	producer_(time_to_wait)
 
 
 if __name__ == '__main__':
-	main()
+	if len(list(argv)) == 1:
+		main()
+	else:
+		main(int(argv[1]))
