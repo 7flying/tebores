@@ -73,6 +73,7 @@ def main(time_to_wait=60):
 
 
 if __name__ == '__main__':
+	
 	if len(list(argv)) == 1:
 		main()
 	else:
