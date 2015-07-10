@@ -13,7 +13,7 @@ Currently it tweets via Selenium, I will make use of the Twitter api on the futu
 
 1 - Create a Twitter account.
 
-2 - Create ```tebores/files/sele_auth.py``` and type:
+2 - Create ```tebores/files/auth.py``` and type:
   ```python
   user = "your_twitter_account_without_@"
   password = "the_password"
