@@ -14,7 +14,7 @@ class TwitterBot(object):
         self.api = API(auth)
 
     def tweet(self, text):
-        self.api.update_status(text)
+        self.api.update_status(status=text)
 
     def sign_out(self):
         TwitterBot.CONSUMER_KEY, TwitterBot.CONSUMER_SECRET = (None,) * 2

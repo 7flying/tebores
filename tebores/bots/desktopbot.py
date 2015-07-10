@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import sys
 from time import sleep
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
