@@ -25,8 +25,11 @@ class DBManager(object):
 				tweeted INTEGER NOT NULL DEFAULT 0);"""
 			)
 
-			cursor.execute("INSERT INTO Webs (name, url) VALUES ('it-ebooks', 'http://it-ebooks.info')")
-			cursor.execute("INSERT INTO Webs (name, url) VALUES ('freecomputerbooks', 'http://freecomputerbooks.com')")
+			cursor.execute("INSERT INTO Webs (name, url)" +
+                           " VALUES ('it-ebooks', 'http://it-ebooks.info')")
+			cursor.execute("INSERT INTO Webs (name, url)" +
+                           " VALUES ('freecomputerbooks'," +
+                           " 'http://freecomputerbooks.com')")
 
 			DBManager.conn.commit()
 			self.disconnect()
@@ -52,7 +55,9 @@ class DBManager(object):
 		cursor.execute("SELECT id FROM Webs WHERE url = ?", (book_web_url,))
 		result = cursor.fetchone()
 		if result:
-			cursor.execute("INSERT INTO Books (idWeb, name, url) VALUES (?, ?, ?);", (result[0], book_name, book_url))
+			cursor.execute("INSERT INTO Books (idWeb, name, url)" +
+                           " VALUES (?, ?, ?);",
+                           (result[0], book_name, book_url))
 			DBManager.conn.commit()
 		
 

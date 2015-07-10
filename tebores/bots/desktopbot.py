@@ -19,8 +19,7 @@ class DesktopBot(object):
 	# Tweeting
 	new_tweet_button = "global-new-tweet-button"
 	new_tweet_text_box = "tweet-box-global"
-
-
+    
 	def __init__(self):
 		self.firefox = webdriver.Firefox()
 		self.firefox.get(DesktopBot.login_url)
