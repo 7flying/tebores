@@ -1,0 +1,4 @@
+requests>=2.2
+beautifulsoup4>=4.3
+selenium>=2.44
+tweepy>=3.3
