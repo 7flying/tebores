@@ -4,7 +4,6 @@ import threading
 import Queue
 from time import sleep
 from datetime import datetime
-from sys import argv
 
 import config
 from bookcrawler import BookCrawler
@@ -19,12 +18,11 @@ manager = DBManager(config.DB_NAME)
 to_mark = [] # Books to mark as tweeted
 to_mark_lock = threading.Condition() 
 
-def producer_(time_to_wait):
+def producer_():
     """Producer thread, checks the book pages."""
     pro_schedule = Scheduler(config.TIMETABLE_SCRA)
     crawlers = []
     for subcrawler in BookCrawler.__subclasses__():
-        print subcrawler.__name__
         crawlers.append(BookCrawler.factory(subcrawler.__name__))
     while True:
         if pro_schedule.is_time():
@@ -81,16 +79,13 @@ def insert_book(book_web_url, book_name, bool_url):
 def mark_tweeted(book_url):
     manager.mark_tweeted(book_url)
 
-def main(time_to_wait=60):
+def main():
     manager.connect()
     consumer = threading.Thread(target=consumer_)
     consumer.setDaemon(True)
     consumer.start()
-    producer_(time_to_wait)
+    producer_()
 
 
 if __name__ == '__main__':
-    if len(list(argv)) == 1:
-        main()
-    else:
-        main(int(argv[1]))
+    main()

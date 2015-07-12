@@ -11,11 +11,39 @@ It has a db to record what it has scrapped.
 
 # How to make your own
 
+## Timetable and frequency
+
+You can modify the tweet and scrap (data recollection) times on ```config.py```:
+
+```python
+# Bot timetable
+TIMETABLE_SCRA = {
+    # Scraping hours (data recollection) from-tog 24h format.
+    'FROM' : '11:45',
+    'TO' : '22:00'
+    }
+TIMETABLE_TWI = {
+    # Tweeting hours from-to 24h format.
+    'FROM' : '12:00',
+    'TO' : '22:00'
+    }
+```
+as well as the scrap and tweet frequency on the above intervals:
+```python
+# Scraping frequency, seconds
+S_FREQ = 300
+# Tweeting frequency, seconds
+TW_FREQ = 180
+
+```
+
+## Authentication
+
 To authenticate you can use a username-password pair, or the Twitter API keys.
 
 First, fill in ```config.py```'s variables.
 
-```
+```python
 # Name of the database -> put the one you like
 DB_NAME = 'tebores_db.sqlite'
 # Bot type: DesktopBot or TwitterAPIBot -> choose one
@@ -38,19 +66,18 @@ BOT_TYPE = 'TwitterAPIBot'
     
     password = "the_password"
     ```
-    
+
+## Start!
+
 After setting up the login you can launch the bot:
 ```
 python daemon.py 
 ```
 
-You can specify the number of seconds that Tebores will wait between the
-tweets.
+But better with:
 ```
-# Wait 5 mins between tweets.
-python daemon.py 300
+nohup python daemon.py &
 ```
-
 
 # Enhance
 
@@ -85,6 +112,10 @@ magic, it must return a dictionary with ```book-url:book-name```.
 		  # Your magic goes here.
 		  return book_dict
   ```
+
+# Headless Selenium
+
+TODO: explain how to use xvfb to use headless selenium
 
 # Future
 

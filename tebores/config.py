@@ -6,7 +6,7 @@ DB_NAME = 'tebores_db.sqlite'
 BOT_TYPE = 'TwitterAPIBot'
 # Bot timetable
 TIMETABLE_SCRA = {
-    # Scraping hours (data recolection) from-tog 24h format.
+    # Scraping hours (data recollection) from-to 24h format.
     'FROM' : '11:45',
     'TO' : '22:00'
     }
@@ -18,5 +18,5 @@ TIMETABLE_TWI = {
 
 # Scraping frequency, seconds
 S_FREQ = 300
-# Tweeting frequency
+# Tweeting frequency, seconds
 TW_FREQ = 180
