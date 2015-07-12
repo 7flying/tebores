@@ -4,12 +4,13 @@ Tebores
 Tebores is a Tech Book Recommendation System.
 
 It consists of a web-scrapper that obtains the latest books published at
-it-ebooks and freecomputerbooks and tweets them
-in [@tebores_](https://twitter.com/tebores_).
+**it-ebooks** and **freecomputerbooks**, then tweets about them in
+[@tebores_](https://twitter.com/tebores_).
 
-It has a db to record what it has scrapped.
+If you follow the bot and favourite some of the tweets Tebores will start
+recommending similar books (-> doing this last part).
 
-# How to make your own
+# How to roll your own
 
 ## Timetable and frequency
 
@@ -18,7 +19,7 @@ You can modify the tweet and scrap (data recollection) times on ```config.py```:
 ```python
 # Bot timetable
 TIMETABLE_SCRA = {
-    # Scraping hours (data recollection) from-tog 24h format.
+    # Scraping hours (data recollection) from-to 24h format.
     'FROM' : '11:45',
     'TO' : '22:00'
     }
@@ -113,9 +114,12 @@ magic, it must return a dictionary with ```book-url:book-name```.
 		  return book_dict
   ```
 
-# Headless Selenium
+# Headless Firefox-Selenium
 
-TODO: explain how to use xvfb to use headless selenium
+If you don't want to use the Twitter API and Selenium opening the browser seems
+annoying, setup a headless version of Firefox-Selenium.
+
+TODO: explain how to use xvfb
 
 # Future
 
