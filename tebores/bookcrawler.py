@@ -17,7 +17,7 @@ class BookCrawler(object):
         self.html = self.get_html(url)
 
     def get_html(self, web_page):
-        return BeautifulSoup(get(web_page).text)
+        return BeautifulSoup(get(web_page).text, 'html.parser')
 
     def get_url(self):
         return self.url

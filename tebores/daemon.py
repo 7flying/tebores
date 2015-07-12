@@ -60,7 +60,7 @@ def consumer_():
             book = new_books.get()
             total_len = len(book[0]) + len(book[1]) + 1
             if total_len > 140:
-                book[0] = book[0][:-(total_len - 140)]
+                book[0] = (book[0][:-(total_len - 140)], book[1])
             bot.tweet(book[0] + " " + book[1])
             print " [ consumer ] Tweet: %s \n\t@%s" % ((book[0] + " " + book[1]),
                                                    datetime.now().time())
