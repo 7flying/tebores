@@ -76,8 +76,13 @@ python daemon.py
 ```
 
 But better with:
-```
+```bash
 nohup python daemon.py &
+```
+
+If your machine has more important things to do, schedule the process priority:
+```bash
+nohup nice python daemon.py &
 ```
 
 # Enhance
@@ -117,9 +122,26 @@ magic, it must return a dictionary with ```book-url:book-name```.
 # Headless Firefox-Selenium
 
 If you don't want to use the Twitter API and Selenium opening the browser seems
-annoying, setup a headless version of Firefox-Selenium.
+annoying, setup a headless version of Firefox-Selenium. We are going to use
+[Xvfb](http://www.x.org/releases/X11R7.6/doc/man/man1/Xvfb.1.xhtml),
+a virtual framebuffer X server.
 
-TODO: explain how to use xvfb
+Install Xvfb and its dependencies:
+
+```bash
+sudo apt-get -y --force-yes install xvfb x11-xkb-utils xfonts-100dpi \
+xfonts-75dpi xfonts-scalable xfonts-cyrillic x11-apps
+```
+
+Start Xvfb and setup the ```DISPLAY``` environment variable:
+
+```bash
+Xvfb :99 -screen 0 1280x1024x16 &
+export DISPLAY=:99
+```
+
+Alternatively you can use it as service, see:
+[xvfb script](https://github.com/7flying/tebores/blob/master/tebores/xvfb).
 
 # Future
 
