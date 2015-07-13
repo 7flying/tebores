@@ -45,6 +45,8 @@ def producer_():
                         sleep(1)
             # Wait 
             sleep(config.S_FREQ)
+        else:
+            sleep(60)
 
 def consumer_():
     """Consumer thread, tweets the book updates."""
@@ -68,6 +70,8 @@ def consumer_():
                 to_mark.append(book[1])
                 to_mark_lock.notify()
             sleep(config.TW_FREQ)
+        else:
+            sleep(60)
 
 
 def is_new_book(book_url):
