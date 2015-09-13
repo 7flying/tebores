@@ -2,8 +2,7 @@
 
 import threading
 import Queue
-from time import sleep
-from datetime import datetime
+from time import sleep, strftime
 
 import config
 from bookcrawler import BookCrawler
@@ -32,10 +31,11 @@ def producer_():
                     if is_new_book(book):
                         # url of web page, book name, book url
                         insert_book(crawler.get_url(), books[book], book)
-                        print " [ producer ] New book: %s" % (books[book] + \
-                                                          " - " + \
-                                                          crawler.get_url() + \
-                                                          book)
+                        print " [ producer@%s ] New book: %s" % (strftime("%H:%M:%S, %d/%m/%y"),
+                                                                 books[book] + \
+                                                                 " - " + \
+                                                                 crawler.get_url() + \
+                                                                 book)
                         new_books.put((books[book], crawler.get_url() + book))
                         with to_mark_lock:
                             while not to_mark:
@@ -43,7 +43,7 @@ def producer_():
                             mark = to_mark.pop(0)
                             mark_tweeted(mark)
                         sleep(1)
-            # Wait 
+            # Wait
             sleep(config.S_FREQ)
         else:
             sleep(60)
@@ -62,10 +62,10 @@ def consumer_():
             book = new_books.get()
             total_len = len(book[0]) + len(book[1]) + 1
             if total_len > 140:
-                book[0] = (book[0][:-(total_len - 140)], book[1])
+                book = (book[0][:-(total_len - 140)], book[1])
             bot.tweet(book[0] + " " + book[1])
-            print " [ consumer ] Tweet: %s \n\t@%s" % ((book[0] + " " + book[1]),
-                                                   datetime.now().time())
+            print " [ consumer@%s ] Tweet: %s" % (strftime("%H:%M:%S, %d/%m/%y"),
+                                                  (book[0] + " " + book[1]))
             with to_mark_lock:
                 to_mark.append(book[1])
                 to_mark_lock.notify()
